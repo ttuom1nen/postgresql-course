@@ -1,24 +1,11 @@
 const pool = require('../pool');
+const toCamelCase = require("./utils/to-camel-case")
 
 class UserRepo {
   static async find() {
     const { rows } = await pool.query('SELECT * FROM users;');
 
-    const parsedRows = rows.map((row) => {
-      const replaced = {};
-
-      for (let key in row) {
-        const camelCase = key.replace(/([-_][a-z])/gi, ($1) =>
-          $1.toUpperCase().replace('_', '')
-        );
-
-        replaced[camelCase] = row[key];
-      }
-
-      return replaced;
-    });
-
-    return parsedRows;
+    return toCamelCase(rows);
   }
 
   static async findById() {}
